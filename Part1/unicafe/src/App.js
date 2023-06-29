@@ -17,6 +17,12 @@ const Statistics = (props) => {
   let neutral = props.neutral * 0;
   let bad = props.bad * -1;
 
+  if (props.good === 0 && props.neutral === 0 && props.bad === 0)
+    return (
+      <div>
+        <h4>No feedback given yet</h4>
+      </div>
+    );
   return (
     <div>
       <h2>Statistics</h2> <p>good {props.good}</p>
