@@ -22,7 +22,6 @@ const App = () => {
   const getRandom = () => {
     const randomAnecdote = Math.floor(Math.random() * anecdotes.length);
     setSelected(randomAnecdote);
-    console.log(selected);
   };
 
   const voteAnecdote = () => {
