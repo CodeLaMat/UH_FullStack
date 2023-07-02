@@ -9,6 +9,12 @@ const Header = ({ course }) => {
 };
 
 const Content = ({ course }) => {
+  const total =
+    course.parts[0].exercises +
+    course.parts[1].exercises +
+    course.parts[2].exercises +
+    course.parts[3].exercises;
+
   return (
     <div>
       <p>
@@ -20,6 +26,11 @@ const Content = ({ course }) => {
       <p>
         {course.parts[2].name} {course.parts[2].exercises}
       </p>
+      <p>
+        {course.parts[3].name} {course.parts[3].exercises}
+      </p>
+
+      <h4>total of {total} exercises</h4>
     </div>
   );
 };
