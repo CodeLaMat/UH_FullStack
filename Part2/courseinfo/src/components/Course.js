@@ -1,41 +1,38 @@
 import React from "react";
 
-const Header = ({ course }) => {
+const Header = ({ courses }) => {
+  return <div>{/* <h1>{courses.name}</h1> */}</div>;
+};
+
+const Content = ({ courses }) => {
   return (
     <div>
-      <h1>{course.name}</h1>
+      {courses.map((course) => (
+        <div key={course.id}>
+          <h2>{course.name}</h2>
+          {course.parts.map((part) => (
+            <p key={part.id}>
+              {part.name}: {part.exercises} exercises
+            </p>
+          ))}{" "}
+          <div>
+            <h4>
+              total of{" "}
+              {course.parts.reduce((sum, part) => sum + part.exercises, 0)}{" "}
+              exercises
+            </h4>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
 
-const Content = ({ course }) => {
-  const total = course.parts.reduce((sum, part) => sum + part.exercises, 0);
-
+const Course = ({ courses }) => {
   return (
     <div>
-      <p>
-        {course.parts[0].name} {course.parts[0].exercises}
-      </p>
-      <p>
-        {course.parts[1].name} {course.parts[1].exercises}
-      </p>
-      <p>
-        {course.parts[2].name} {course.parts[2].exercises}
-      </p>
-      <p>
-        {course.parts[3].name} {course.parts[3].exercises}
-      </p>
-
-      <h4>total of {total} exercises</h4>
-    </div>
-  );
-};
-
-const Course = ({ course }) => {
-  return (
-    <div>
-      <Header course={course} />
-      <Content course={course} />
+      <Header courses={courses} />
+      <Content courses={courses} />
     </div>
   );
 };
