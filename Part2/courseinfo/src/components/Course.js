@@ -9,11 +9,7 @@ const Header = ({ course }) => {
 };
 
 const Content = ({ course }) => {
-  const total =
-    course.parts[0].exercises +
-    course.parts[1].exercises +
-    course.parts[2].exercises +
-    course.parts[3].exercises;
+  const total = course.parts.reduce((sum, part) => sum + part.exercises, 0);
 
   return (
     <div>
