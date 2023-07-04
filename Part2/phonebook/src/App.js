@@ -36,13 +36,27 @@ const App = () => {
 
   const addContactHandler = (event) => {
     event.preventDefault();
-    const personIsAdded = persons.some((person) => person.name === newName);
-
-    if (personIsAdded) {
-      alert(`${newName} is already added to phonebook`);
+    const personExists = persons.some((person) => person.name === newName);
+    if (personExists) {
+      const personToUpdate = persons.find((person) => person.name === newName);
+      const changedContact = { ...personToUpdate, number: newNumber };
+      alert(
+        `${newName} is already added to the phonebook. Would you like to update the number?`
+      );
+      contactService
+        .update(personToUpdate.id, changedContact)
+        .then((returnedContact) => {
+          console.log(returnedContact);
+          setPersons(
+            persons.map((person) =>
+              person.id !== returnedContact.id ? person : returnedContact
+            )
+          );
+          setNewName("");
+          setNewNumber("");
+        });
     } else {
       const newPerson = { name: newName, number: newNumber };
-
       contactService.create(newPerson).then((returnedContact) => {
         setPersons(persons.concat(returnedContact));
         setNewName("");
@@ -77,7 +91,7 @@ const App = () => {
       </div>
       <div>
         <PersonForm
-          addNameHandler={addContactHandler}
+          addContactHandler={addContactHandler}
           changeNameHandler={changeNameHandler}
           changeNumberHandler={changeNumberHandler}
           newName={newName}
