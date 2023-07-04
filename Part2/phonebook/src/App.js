@@ -28,7 +28,7 @@ const App = () => {
     setPersonInSearch(e.target.value);
   };
 
-  const findByName = () => {
+  const sortedByName = () => {
     return persons.filter((person) =>
       person.name.toLowerCase().includes(personInSearch.toLowerCase())
     );
@@ -48,6 +48,24 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       });
+    }
+  };
+
+  const deleteContact = (id) => {
+    const contact = persons.find((person) => person.id === id);
+    const confirmDeletion = window.confirm(`Delete ${contact.name}?`);
+    if (confirmDeletion) {
+      contactService
+        .remove(contact.id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          alert(
+            `The contact '${contact.name}' was already deleted from server`
+          );
+          setPersons(persons.filter((person) => person.id !== id));
+        });
     }
   };
 
@@ -71,7 +89,8 @@ const App = () => {
         <Persons
           persons={persons}
           personInSearch={personInSearch}
-          findByName={findByName}
+          sortedByName={sortedByName}
+          deleteContact={deleteContact}
         />
       </div>
     </div>

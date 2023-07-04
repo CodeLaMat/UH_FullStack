@@ -18,7 +18,6 @@ const PersonForm = ({
             onChange={changeNameHandler}
             value={newName}
           />
-          <button type="button">Update</button>
         </div>
         <div>
           number:{" "}
@@ -28,7 +27,6 @@ const PersonForm = ({
             onChange={changeNumberHandler}
             value={newNumber}
           />
-          <button type="button">Update</button>
         </div>
         <div>
           <button type="submit">add</button>
