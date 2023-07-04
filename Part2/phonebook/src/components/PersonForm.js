@@ -1,7 +1,7 @@
 import React from "react";
 
 const PersonForm = ({
-  addNameHandler,
+  addContactHandler,
   changeNameHandler,
   changeNumberHandler,
   newName,
@@ -10,7 +10,7 @@ const PersonForm = ({
   return (
     <div>
       {" "}
-      <form onSubmit={addNameHandler}>
+      <form onSubmit={addContactHandler}>
         <div>
           name:{" "}
           <input
@@ -18,6 +18,7 @@ const PersonForm = ({
             onChange={changeNameHandler}
             value={newName}
           />
+          <button type="button">Update</button>
         </div>
         <div>
           number:{" "}
@@ -27,6 +28,7 @@ const PersonForm = ({
             onChange={changeNumberHandler}
             value={newNumber}
           />
+          <button type="button">Update</button>
         </div>
         <div>
           <button type="submit">add</button>

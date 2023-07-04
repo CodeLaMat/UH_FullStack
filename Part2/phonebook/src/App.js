@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import axios from "axios";
 import contactService from "./services/contacts";
 
 const App = () => {
@@ -35,7 +34,7 @@ const App = () => {
     );
   };
 
-  const addNameHandler = (event) => {
+  const addContactHandler = (event) => {
     event.preventDefault();
     const personIsAdded = persons.some((person) => person.name === newName);
 
@@ -60,7 +59,7 @@ const App = () => {
       </div>
       <div>
         <PersonForm
-          addNameHandler={addNameHandler}
+          addNameHandler={addContactHandler}
           changeNameHandler={changeNameHandler}
           changeNumberHandler={changeNumberHandler}
           newName={newName}
