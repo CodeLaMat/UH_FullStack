@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [personInSearch, setPersonInSearch] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [confirmationMessage, setConfirmationMessage] = useState(null);
 
   useEffect(() => {
     contactService.getAll().then((initialContacts) => {
@@ -42,30 +43,44 @@ const App = () => {
     if (personExists) {
       const personToUpdate = persons.find((person) => person.name === newName);
       const changedContact = { ...personToUpdate, number: newNumber };
-      alert(
+      const confirmUpdate = window.confirm(
         `${newName} is already added to the phonebook. Would you like to update the number?`
       );
-      contactService
-        .update(personToUpdate.id, changedContact)
-        .then((returnedContact) => {
-          console.log(returnedContact);
-          setPersons(
-            persons.map((person) =>
-              person.id !== returnedContact.id ? person : returnedContact
-            )
-          );
-          setNewName("");
-          setNewNumber("");
-        });
+      if (confirmUpdate) {
+        setConfirmationMessage(`Phone number of ${newName} has been updated`);
+        setTimeout(() => {
+          setConfirmationMessage(null);
+        }, 5000);
+        contactService
+          .update(personToUpdate.id, changedContact)
+          .then((returnedContact) => {
+            console.log(returnedContact);
+            setPersons(
+              persons.map((person) =>
+                person.id !== returnedContact.id ? person : returnedContact
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            setErrorMessage(
+              `Information of ${newName} has already been deleted from the phonebook`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
+          });
+      }
     } else {
       const newPerson = { name: newName, number: newNumber };
       contactService.create(newPerson).then((returnedContact) => {
         setPersons(persons.concat(returnedContact));
-        setErrorMessage(`Added '${newName}' to the phonebook`);
+        setConfirmationMessage(`Added '${newName}' to the phonebook`);
 
         setTimeout(() => {
-          setErrorMessage(null);
-        }, 50000);
+          setConfirmationMessage(null);
+        }, 5000);
 
         setNewName("");
         setNewNumber("");
@@ -75,17 +90,29 @@ const App = () => {
 
   const deleteContact = (id) => {
     const contact = persons.find((person) => person.id === id);
-    const confirmDeletion = window.confirm(`Delete ${contact.name}?`);
+    const confirmDeletion = window.confirm(
+      `Delete ${contact.name} from the phonebook?`
+    );
     if (confirmDeletion) {
+      setConfirmationMessage(
+        `The contact '${contact.name}' is removed from the phonebook`
+      );
+      setTimeout(() => {
+        setConfirmationMessage(null);
+      }, 5000);
       contactService
         .remove(contact.id)
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
         })
         .catch((error) => {
-          alert(
+          setErrorMessage(
             `The contact '${contact.name}' was already deleted from server`
           );
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000);
+
           setPersons(persons.filter((person) => person.id !== id));
         });
     }
@@ -94,7 +121,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification
+        message={errorMessage ? errorMessage : confirmationMessage}
+        messageType={errorMessage ? "error" : "confirmation"}
+      />{" "}
       <div>
         <Filter searchHandler={searchHandler} />
       </div>
